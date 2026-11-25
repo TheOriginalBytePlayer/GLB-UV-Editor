@@ -8,7 +8,7 @@
     "dev": "vite --config vite.config.ts --host 127.0.0.1",
     "build": "vite build --config vite.config.ts",
     "typecheck": "tsc --noEmit -p tsconfig.json",
-    "test": "node --import tsx node_modules/@cucumber/cucumber/bin/cucumber.js --require \"tests/features/steps/**/*.mjs\" \"tests/features/**/*.feature\""
+    "test": "node --import tsx node_modules/@cucumber/cucumber/bin/cucumber.js --import \"tests/features/steps/**/*.mjs\" \"tests/features/**/*.feature\""
   },
   "dependencies": {
     "@babylonjs/core": "^9.25.0",
