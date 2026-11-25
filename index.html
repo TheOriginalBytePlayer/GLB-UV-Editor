@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>GLB Mesh Editor</title>
+    <link rel="stylesheet" href="/src/style.css" />
+  </head>
+  <body>
+    <header id="toolbar">
+      <div class="group">
+        <button id="btnOpen" title="Open a GLB (Ctrl+O)">Open GLB…</button>
+        <button id="btnQuickSave" title="Quick save: write straight back to the file you last saved, no dialog (Ctrl+S). The first time it asks where." disabled>Quick Save</button>
+        <button id="btnSave" title="Save the edited GLB as a new file (Ctrl+Shift+S)" disabled>Save As…</button>
+        <button id="btnTexture" title="Load a picture (PNG, JPEG, WebP...) as the base colour texture of the selected part" disabled>Load Texture…</button>
+        <select id="partSel" title="Which mesh part to edit" disabled></select>
+      </div>
+      <div class="group" role="radiogroup" aria-label="View">
+        <button id="viewRendered" class="on" title="Fully rendered (Tab switches view)">Rendered</button>
+        <button id="viewMesh" title="Textured mesh with points and polygons (Tab)">Mesh</button>
+        <button id="btnUV" title="Split screen with the UV editor (U)">UV Split</button>
+        <button id="btnXray" title="See and select points through the surface (X)">X-ray</button>
+        <button id="btnFrame" title="Frame the whole model (Home)">Frame</button>
+      </div>
+      <div class="group" role="radiogroup" aria-label="Select">
+        <button id="modePoint" class="on" title="Select points (1)">Points</button>
+        <button id="modePoly" title="Select polygons (2)">Polygons</button>
+        <button id="btnInvert" title="Invert the selection: select everything that is not selected (I or Ctrl+I)" disabled>Invert</button>
+      </div>
+      <div class="group" role="radiogroup" aria-label="Drag shape">
+        <button id="toolBox" class="on" title="Drag a rectangle to select (B)">Box</button>
+        <button id="toolLasso" title="Draw a free-hand lasso to select (L)">Lasso</button>
+      </div>
+      <div class="group">
+        <div class="dd">
+          <button id="btnWeld" title="Weld the selected points into one (W repeats the last choice)">Weld ▾</button>
+          <div id="weldMenu" class="menu" hidden>
+            <button data-weld="last" title="All selected points move to the position of the last point selected">Others → Last Pos</button>
+            <button data-weld="first" title="All selected points move to the position of the first point selected">Others → First Pos</button>
+            <button data-weld="average" title="The points meet at their average position">Average Position</button>
+          </div>
+        </div>
+        <button id="btnDelete" title="Delete the selection (Delete)">Delete</button>
+        <button id="btnAdd" title="Make a polygon from 3 or 4 selected points (N)">Add polygon</button>
+        <button id="btnHide" title="Hide the selected polygons (H)">Hide</button>
+        <button id="btnShow" title="Show every hidden polygon again and select them (Alt+H)">Show all</button>
+        <button id="btnFlip" title="Two polygons sharing an edge: switch the diagonal (F)">Flip diagonal</button>
+        <button id="btnCut" title="Cut the selected polygons in half (C)">Cut in half</button>
+      </div>
+      <div class="group">
+        <button id="btnSnap" title="UV snap: dragged UV points jump onto nearby UV points (S)">UV Snap</button>
+        <button id="btnUndo" title="Undo (Ctrl+Z)" disabled>Undo</button>
+        <button id="btnRedo" title="Redo (Ctrl+Y)" disabled>Redo</button>
+        <label class="tol" title="Welding points whose UVs are further apart than this asks first. 1 is the whole texture.">
+          Weld UV tolerance
+          <input id="uvTol" type="number" min="0" max="1" step="0.01" value="0.05" />
+        </label>
+        <button id="btnHelp" title="Controls">?</button>
+      </div>
+    </header>
+    <main id="stage">
+      <section id="view3d"><canvas id="c3d"></canvas></section>
+      <section id="viewUV"><canvas id="cuv"></canvas><div class="uvbar"><div class="dd"><button id="btnReproject" title="Recompute the UVs of the selected points or polygons">Reproject ▾</button><div id="reprojMenu" class="menu menu-right" hidden><button data-reproj="view" title="Project the selection onto the screen as the 3D view shows it now, keeping the UV area it had">From current 3D view</button><button data-reproj="unwrap" title="Flatten the selected polygons from their 3D positions (LSCM unwrap), keeping the UV area they had">Unwrap from mesh positions</button></div></div><button id="btnHAlign" title="Put the selected UV points on one horizontal line (their average height)">H-Align</button><button id="btnVAlign" title="Put the selected UV points on one vertical line (their average position across)">V-Align</button></div><div class="uvtag">UV editor — drag to move, wheel to zoom, middle/right drag to pan</div></section>
+    </main>
+    <footer id="status"><span id="statusText"></span><span id="counts"></span></footer>
+    <input id="fileInput" type="file" accept=".glb,model/gltf-binary" hidden />
+    <input id="textureInput" type="file" accept="image/*" hidden />
+    <div id="modal" hidden><div class="card"><p id="modalText"></p><div id="modalButtons"></div></div></div>
+    <script type="module" src="/src/main.ts"></script>
+  </body>
+</html>
